@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Messaging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,6 +11,8 @@ namespace TableReservation
     {
         private readonly List<Table> _tables = new List<Table>();
 
+        //private readonly Producer _producer = new("BookingNotification", "shrimp.rmq.cloudamqp.com");
+
         public Restaurant()
         {
             for (int i = 1; i <= 10; i++)
@@ -20,58 +23,54 @@ namespace TableReservation
 
         public void BookFreeTable(int countOfPersons)
         {
-            Console.WriteLine("Wait for a second I will choose a table for you and approve reservation. Stay on line...");
+            Notifications.Message(Notification.WaitOnLine);
+
             var table = _tables.FirstOrDefault(table => 
             table.SeatsCount > countOfPersons && table.State == State.Free);
             Thread.Sleep(5000);
             table?.SetState(State.Booked);
-            Console.WriteLine(table is null 
-                ? "Sorry, but there is no aviable tables right now" 
-                : $"Ready, you table number is {table.Id}");
+
+            Notifications.BookingResultAsync(table);
         }
 
         public void BookFreeTableAsync(int countOfPersons)
         {
-            Console.WriteLine("Wait for a second I'll choose a table for you and approve reservation. We'll send you a notification");
+            Notifications.Message(Notification.WaitAsync);
             Task.Run(async () =>
             {
                 var table = _tables.FirstOrDefault(table =>
                 table.SeatsCount > countOfPersons && table.State == State.Free);
                 await Task.Delay(1000 * 5);
                 table?.SetState(State.Booked);
-                Console.WriteLine(table is null
-                ? "NOTIFICATION: Sorry, but there is no aviable tables right now"
-                : $"NOTIFICATION: Ready, you table number is {table.Id}");
+
+                Notifications.BookingResultAsync(table);
             });
         }
 
         public void EscapeBookingTable(int tableId)
         {
-            Console.WriteLine("Wait for second I'll escape you booking. Stay on line...");
+            Notifications.Message(Notification.EscapeOnLine);
+
             var table = _tables.FirstOrDefault(table =>
-            table.Id == tableId);
+            table.Id == tableId && table.State == State.Booked);
             Thread.Sleep(5000);
-            if (table?.State == State.Free)
-            {
-                Console.WriteLine("Sorry, but it is already free");
-            }
-            Console.WriteLine(table is null
-                ? "Sorry, but there is no such number of table"
-                : $"Ready, table number {table.Id} is free");
+            table?.SetState(State.Free);
+            
+            Notifications.EscapeResultAsync(table);
         }
 
         public void EscapeBookingTableAsync(int tableId)
         {
-            Console.WriteLine("We'll send you a message with result");
+            Notifications.Message(Notification.EscapeAsync);
+
             Task.Run(async () =>
             {
                 var table = _tables.FirstOrDefault(table =>
-                table.Id == tableId);
+                table.Id == tableId && table.State == State.Booked);
                 await Task.Delay(1000 * 5);
                 table?.SetState(State.Free);
-                Console.WriteLine(table is null
-                ? "NOTIFICATION: Sorry, but there is no such number of table"
-                : $"NOTIFICATION: Ready, table number {table.Id} is free");
+
+                Notifications.EscapeResultAsync(table);
             });
         }
     }

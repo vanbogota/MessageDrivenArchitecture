@@ -15,30 +15,34 @@ namespace TableReservation
         public Table(int id)
         {
             Id = id;
-            Random random = new Random();
-            SeatsCount = random.Next(2, 5);
+            SeatsCount = _random.Next(2, 5);
             State = State.Free;
         }
 
         public bool SetState(State state)
         {
-            if (State == state)
+            lock (_lock)
             {
-                return false;
-            }
-            State = state;
-
-            Task.Run(async () =>
-            {
-                if (State == State.Booked)
+                if (State == state)
                 {
-                    await Task.Delay(1000 * 20);
-                    State = State.Free;
-                    Console.WriteLine($"Table {Id} is free");
-                }                
-            });
+                    return false;
+                }
+                State = state;
 
-            return true;
+                Task.Run(async () =>
+                {
+                    if (State == State.Booked)
+                    {
+                        await Task.Delay(1000 * 20);
+                        State = State.Free;
+                        Console.WriteLine($"Table {Id} is free");
+                    }
+                });
+
+                return true;
+            }            
         }
+        private readonly object _lock = new object();
+        private static readonly Random _random = new();
     }
 }

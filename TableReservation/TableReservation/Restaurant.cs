@@ -1,5 +1,4 @@
-﻿using Messaging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TableReservation
 {
-    internal class Restaurant
+    public class Restaurant
     {
         private readonly List<Table> _tables = new List<Table>();
 
@@ -33,18 +32,17 @@ namespace TableReservation
             Notifications.BookingResultAsync(table);
         }
 
-        public void BookFreeTableAsync(int countOfPersons)
+        public async Task<bool?> BookFreeTableAsync(int countOfPersons)
         {
             Notifications.Message(Notification.WaitAsync);
-            Task.Run(async () =>
-            {
-                var table = _tables.FirstOrDefault(table =>
-                table.SeatsCount > countOfPersons && table.State == State.Free);
-                await Task.Delay(1000 * 5);
-                table?.SetState(State.Booked);
-
-                Notifications.BookingResultAsync(table);
-            });
+            var table = _tables.FirstOrDefault(table =>
+                table.SeatsCount > countOfPersons 
+                && table.State == State.Free);
+            
+            await Task.Delay(1000 * 5);
+                
+            Notifications.BookingResultAsync(table);  
+            return table?.SetState(State.Booked);
         }
 
         public void EscapeBookingTable(int tableId)

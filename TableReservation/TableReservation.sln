@@ -5,9 +5,13 @@ VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TableReservation", "TableReservation\TableReservation.csproj", "{4D1986D3-585C-4EB9-807B-3A3D3C10A878}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Messaging", "Messaging\Messaging.csproj", "{D860175E-9351-472B-88A7-F493E0C75F99}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Messaging", "Messaging\Messaging.csproj", "{D860175E-9351-472B-88A7-F493E0C75F99}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableReservation.Notification", "TableReservation.Notification\TableReservation.Notification.csproj", "{095AA8C6-5CF7-40AB-B6F0-D7BC58F1A2D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TableReservation.Notification", "TableReservation.Notification\TableReservation.Notification.csproj", "{095AA8C6-5CF7-40AB-B6F0-D7BC58F1A2D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableReservation.Messages", "TableReservation.Messages\TableReservation.Messages.csproj", "{314B0D0C-DCE6-4864-A200-0A8550A7D9AE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableReservation.Kitchen", "TableReservation.Kitchen\TableReservation.Kitchen.csproj", "{EDDC0550-FA6D-49E2-9953-825CD9430323}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{095AA8C6-5CF7-40AB-B6F0-D7BC58F1A2D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{095AA8C6-5CF7-40AB-B6F0-D7BC58F1A2D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{095AA8C6-5CF7-40AB-B6F0-D7BC58F1A2D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{314B0D0C-DCE6-4864-A200-0A8550A7D9AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{314B0D0C-DCE6-4864-A200-0A8550A7D9AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{314B0D0C-DCE6-4864-A200-0A8550A7D9AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{314B0D0C-DCE6-4864-A200-0A8550A7D9AE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDDC0550-FA6D-49E2-9953-825CD9430323}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDDC0550-FA6D-49E2-9953-825CD9430323}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDDC0550-FA6D-49E2-9953-825CD9430323}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDDC0550-FA6D-49E2-9953-825CD9430323}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

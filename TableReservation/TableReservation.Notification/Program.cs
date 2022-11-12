@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using MassTransit;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TableReservation.Notification.Consumers;
 
 namespace TableReservation.Notification
 {
@@ -10,11 +12,37 @@ namespace TableReservation.Notification
             Console.OutputEncoding = System.Text.Encoding.UTF8;
             CreateHostBuilder(args).Build().Run(); 
         }
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
-        Host.CreateDefaultBuilder(args)
-            .ConfigureServices((hostContext,services) =>
-            {
-                services.AddHostedService<Worker>();
-            });
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddMassTransit(x =>
+                    {
+                        x.AddConsumer<NotifierTableBookedConsumer>();
+                        x.AddConsumer<KitchenReadyConsumer>();
+
+                        x.UsingRabbitMq((context, cfg) =>
+                        {
+                            cfg.UseMessageRetry(r =>
+                            {
+                                r.Exponential(5,
+                                    TimeSpan.FromSeconds(1),
+                                    TimeSpan.FromSeconds(100),
+                                    TimeSpan.FromSeconds(5));
+                                r.Ignore<StackOverflowException>();
+                                r.Ignore<ArgumentNullException>(x => x.Message.Contains("Consumer"));
+                            });
+
+                            cfg.ConfigureEndpoints(context);
+                        });
+                    });
+                    services.AddSingleton<Notifier>();
+                    services.AddOptions<MassTransitHostOptions>()
+                    .Configure(options =>
+                    {
+                        options.WaitUntilStarted = true; 
+                    });
+                    //services.AddMassTransitHostedService(true);
+                });
     }
 }

@@ -1,9 +1,5 @@
 ﻿using MassTransit;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 using TableReservation.Messages;
 
 namespace TableReservation.Notification.Consumers
@@ -22,8 +18,7 @@ namespace TableReservation.Notification.Consumers
             var result = context.Message.Success;
 
             _notifier.Accept(context.Message.OrderId, 
-                result ? Accepted.Booking : Accepted.Rejected,
-                context.Message.ClientId);
+                result ? Accepted.Booking : Accepted.Rejected);
 
             return Task.CompletedTask;
         }

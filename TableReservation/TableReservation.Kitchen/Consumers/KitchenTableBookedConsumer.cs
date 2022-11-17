@@ -4,7 +4,7 @@ using TableReservation.Messages;
 
 namespace TableReservation.Kitchen.Consumers
 {
-    internal class KitchenTableBookedConsumer : IConsumer<ITableBooked>
+    public class KitchenTableBookedConsumer : IConsumer<ITableBooked>
     {
         private readonly Manager _manager;
 
@@ -18,7 +18,7 @@ namespace TableReservation.Kitchen.Consumers
            var result = context.Message.Success;
 
            if (result)
-               _manager.CheckKitchenReady(context.Message.OrderId, context.Message.PreOrder);
+               _manager.CheckKitchenReady(context.Message.OrderId, Dish.Pizza);
            
            return context.ConsumeCompleted;
         }

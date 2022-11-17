@@ -2,7 +2,6 @@
 
 namespace TableReservation.Messages
 {
-
     public class KitchenReady : IKitchenReady
     {
         public KitchenReady(Guid orderId, bool ready)

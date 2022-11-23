@@ -21,6 +21,7 @@ namespace TableReservation
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
+
             while (!stoppingToken.IsCancellationRequested)
             {
                 await Task.Delay(10000, stoppingToken);

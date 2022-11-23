@@ -1,15 +1,20 @@
 ﻿using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using RabbitMQ.Client;
+using System;
 using TableReservation.Consumers;
 
 namespace TableReservation
 {
     public static class Program
     {
+        //static readonly string _url = "amqps://kjubdcol:zEFpskR90q2tfqgQSTKcYkAZ9qEi20_C@shrimp.rmq.cloudamqp.com/kjubdcol";
+        //static readonly Uri uri = new Uri(_url);
         public static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
+            
             CreateHostBuilder(args).Build().Run();
         }
         private static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -48,8 +53,7 @@ namespace TableReservation
 
                     services.AddTransient<Restaurant>();
                     services.AddTransient<RestaurantBooking>();
-                    services.AddTransient<RestaurantBookingSaga>();
-                    
+                    services.AddTransient<RestaurantBookingSaga>();                    
                     services.AddHostedService<Worker>();
                 });       
     }

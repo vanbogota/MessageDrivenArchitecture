@@ -22,7 +22,7 @@ namespace TableReservation.Kitchen
                         x.AddConsumer<KitchenBookingRequestedConsumer>(
                             configurator =>
                             {
-                                /*configurator.UseScheduledRedelivery(r =>
+                                configurator.UseScheduledRedelivery(r =>
                                 {
                                     r.Intervals(TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(20),
                                         TimeSpan.FromSeconds(30));
@@ -33,7 +33,7 @@ namespace TableReservation.Kitchen
                                         r.Incremental(3, TimeSpan.FromSeconds(1),
                                             TimeSpan.FromSeconds(2));
                                     }
-                                );*/
+                                );
                             })
                             .Endpoint(e =>
                             {

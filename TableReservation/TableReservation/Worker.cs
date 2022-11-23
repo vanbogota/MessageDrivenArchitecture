@@ -20,17 +20,20 @@ namespace TableReservation
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
+            var a = new HashSet<Guid>();
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                await Task.Delay(10000, stoppingToken);
                 Console.WriteLine("Привет! Желаете забронировать столик?");
+                var b = Guid.NewGuid();
 
                 var dateTime = DateTime.Now;
                 await _bus.Publish(
-                    (IBookingRequest)new BookingRequest(NewId.NextGuid(), NewId.NextGuid(), null, dateTime),
+                    new BookingRequest(b, Guid.NewGuid(), null, dateTime),
                     stoppingToken);
+
+                await Task.Delay(10000, stoppingToken);
             }
         }
     }

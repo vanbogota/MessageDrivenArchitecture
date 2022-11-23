@@ -18,8 +18,7 @@ namespace TableReservation.Notification
                 {
                     services.AddMassTransit(x =>
                     {
-                        x.AddConsumer<NotifierTableBookedConsumer>();
-                        x.AddConsumer<KitchenReadyConsumer>();
+                        x.AddConsumer<NotifyConsumer>();
 
                         x.UsingRabbitMq((context, cfg) =>
                         {
@@ -33,16 +32,11 @@ namespace TableReservation.Notification
                                 r.Ignore<ArgumentNullException>(x => x.Message.Contains("Consumer"));
                             });
 
+
                             cfg.ConfigureEndpoints(context);
                         });
                     });
-                    services.AddSingleton<Notifier>();
-                    services.AddOptions<MassTransitHostOptions>()
-                    .Configure(options =>
-                    {
-                        options.WaitUntilStarted = true; 
-                    });
-                    //services.AddMassTransitHostedService(true);
+                    services.AddSingleton<Notifier>();                    
                 });
     }
 }

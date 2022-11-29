@@ -23,7 +23,7 @@ namespace Messaging
             var factory = new ConnectionFactory()
             {
                 HostName = _hostName,
-                Port = 5671,
+                Port = 5672,
                 UserName = "kjubdcol",
                 Password = "zEFpskR90q2tfqgQSTKcYkAZ9qEi20_C",
                 VirtualHost = "kjubdcol"

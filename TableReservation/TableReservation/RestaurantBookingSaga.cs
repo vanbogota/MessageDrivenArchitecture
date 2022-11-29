@@ -82,7 +82,7 @@ namespace TableReservation
 
             SetCompletedWhenFinalized();
         }
-        public State AwaitingBookingApproved { get; private set; }
+        public MassTransit.State AwaitingBookingApproved { get; private set; }
         public Event<IBookingRequest> BookingRequested { get; private set; }
         public Event<ITableBooked> TableBooked { get; private set; }
         public Event<IKitchenReady> KitchenReady { get; private set; }

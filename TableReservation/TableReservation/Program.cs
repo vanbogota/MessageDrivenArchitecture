@@ -4,13 +4,13 @@ using Microsoft.Extensions.Hosting;
 using RabbitMQ.Client;
 using System;
 using TableReservation.Consumers;
+using TableReservation.Messages.InMemoryDb;
 
 namespace TableReservation
 {
     public static class Program
     {
-        //static readonly string _url = "amqps://kjubdcol:zEFpskR90q2tfqgQSTKcYkAZ9qEi20_C@shrimp.rmq.cloudamqp.com/kjubdcol";
-        //static readonly Uri uri = new Uri(_url);
+        
         public static void Main(string[] args)
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
@@ -23,26 +23,18 @@ namespace TableReservation
                 {
                     services.AddMassTransit(x =>
                     {
-                        x.AddConsumer<RestaurantBookingRequestConsumer>()
-                            .Endpoint(e =>
-                            {
-                                e.Temporary = true;
-                            });
+                        x.AddConsumer<RestaurantBookingRequestConsumer>();
 
-                        x.AddConsumer<BookingRequestFaultConsumer>()
-                            .Endpoint(e =>
-                            {
-                                e.Temporary = true;
-                            });
+                        x.AddConsumer<BookingRequestFaultConsumer>();
 
                         x.AddSagaStateMachine<RestaurantBookingSaga, RestaurantBooking>()
-                            .Endpoint(e => e.Temporary = true)
                             .InMemoryRepository();
 
                         x.AddDelayedMessageScheduler();
 
                         x.UsingRabbitMq((context, cfg) =>
                         {
+                            cfg.Durable = false;
                             cfg.UseDelayedMessageScheduler();
                             cfg.UseInMemoryOutbox();
                             cfg.ConfigureEndpoints(context);
@@ -55,6 +47,7 @@ namespace TableReservation
                     services.AddTransient<RestaurantBooking>();
                     services.AddTransient<RestaurantBookingSaga>();                    
                     services.AddHostedService<Worker>();
+                    services.AddSingleton<IInMemoryRepository<BookingRequestModel>>();
                 });       
     }
 }

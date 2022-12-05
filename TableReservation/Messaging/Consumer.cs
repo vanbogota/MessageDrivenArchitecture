@@ -19,7 +19,7 @@ namespace Messaging
         public Consumer(string queueName, string hostName)
         {
             _queueName = queueName;
-            _hostName = hostName;
+            _hostName = "shrimp.rmq.cloudamqp.com";
             var factory = new ConnectionFactory()
             {
                 HostName = _hostName,
@@ -34,8 +34,8 @@ namespace Messaging
 
         public void Receive(EventHandler<BasicDeliverEventArgs> receiveCallback)
         {
-            _channel.ExchangeDeclare("direct_exchange",
-                "direct");
+            _channel.ExchangeDeclare(exchange:"direct_exchange",
+                type:"direct");
 
             _channel.QueueDeclare(_queueName,
                 false,
@@ -43,14 +43,14 @@ namespace Messaging
                 false,
                 null);
 
-            _channel.QueueBind(_queueName,
-                "direct_exchange",
-                _queueName);
+            _channel.QueueBind(queue:_queueName,
+                exchange:"direct_exchange",
+               routingKey: _queueName);
 
             var consumer = new EventingBasicConsumer(_channel);
             consumer.Received += receiveCallback;
 
-            _channel.BasicConsume(_queueName, true, consumer);
+            _channel.BasicConsume(queue: _queueName, autoAck: true, consumer: consumer);
         }
 
         public void Dispose()

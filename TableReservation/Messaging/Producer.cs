@@ -11,7 +11,7 @@ namespace Messaging
         public Producer(string queueName, string hostName)
         {
             _queueName = queueName;
-            _hostName = hostName;
+            _hostName = "shrimp.rmq.cloudamqp.com";
         }
 
         public void Send(string message)
@@ -27,18 +27,20 @@ namespace Messaging
             using var connection = factory.CreateConnection();
             using var channel = connection.CreateModel();
 
-            channel.ExchangeDeclare("direct_exchange",
+            channel.ExchangeDeclare(
+                "direct_exchange",
                 "direct",
                 false,
                 false,
-                null);
+                null
+                );
 
             var body = Encoding.UTF8.GetBytes(message);
 
-            channel.BasicPublish("direct_exchange",
-                _queueName,
-                null,
-                body);
+            channel.BasicPublish(exchange: "direct_exchange",
+                routingKey: _queueName,
+                basicProperties: null,
+                body: body);
         }
     }
 }

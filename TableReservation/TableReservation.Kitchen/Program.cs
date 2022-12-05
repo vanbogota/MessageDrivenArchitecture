@@ -1,7 +1,9 @@
 ﻿using MassTransit;
+using MassTransit.Audit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using TableReservation.Kitchen.Consumers;
+using TableReservation.Messages;
 
 namespace TableReservation.Kitchen
 {
@@ -19,6 +21,11 @@ namespace TableReservation.Kitchen
                 {
                     services.AddMassTransit(x =>
                     {
+                        services.AddSingleton<IMessageAuditStore, AuditStore>();
+
+                        var serviceProvider = services.BuildServiceProvider();
+                        var auditStore = serviceProvider.GetService<IMessageAuditStore>();
+
                         x.AddConsumer<KitchenBookingRequestedConsumer>(
                             configurator =>
                             {
@@ -52,14 +59,22 @@ namespace TableReservation.Kitchen
                             cfg.UseDelayedMessageScheduler();
                             cfg.UseInMemoryOutbox();
                             cfg.ConfigureEndpoints(context);
+                            cfg.ConnectSendAuditObservers(auditStore);
+                            cfg.ConnectConsumeAuditObserver(auditStore);
                         });
+                        
+                    });
+
+                    services.Configure<MassTransitHostOptions>(options =>
+                    {
+                        options.WaitUntilStarted = true;
+                        options.StartTimeout = TimeSpan.FromSeconds(30);
+                        options.StopTimeout = TimeSpan.FromMinutes(1);
                     });
 
                     services.AddSingleton<Manager>();
 
-                    services.AddSingleton<MassTransitHostedService>();
-                    
-                    //services.AddMassTransitHostedService(true);
+                    services.AddSingleton<MassTransitHostedService>();                                        
                 });
     }
 }

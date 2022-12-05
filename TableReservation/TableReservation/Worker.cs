@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MassTransit;
+using MassTransit.RabbitMqTransport;
 using Microsoft.Extensions.Hosting;
 using TableReservation.Messages;
 
@@ -25,15 +26,15 @@ namespace TableReservation
 
             while (!stoppingToken.IsCancellationRequested)
             {
+                await Task.Delay(10000, stoppingToken);
                 Console.WriteLine("Привет! Желаете забронировать столик?");
                 var b = Guid.NewGuid();
 
                 var dateTime = DateTime.Now;
+                var topology = _bus.GetRabbitMqHostTopology();
                 await _bus.Publish(
                     new BookingRequest(b, Guid.NewGuid(), null, dateTime),
-                    stoppingToken);
-
-                await Task.Delay(10000, stoppingToken);
+                    stoppingToken);                
             }
         }
     }

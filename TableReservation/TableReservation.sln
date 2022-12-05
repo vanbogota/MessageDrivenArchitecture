@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TableReservation.Messages",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TableReservation.Kitchen", "TableReservation.Kitchen\TableReservation.Kitchen.csproj", "{EDDC0550-FA6D-49E2-9953-825CD9430323}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{9B706454-C7A4-4E8C-9888-D79F6171AF8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebApplication1", "WebApplication1\WebApplication1.csproj", "{9B706454-C7A4-4E8C-9888-D79F6171AF8F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TableReservation.Tests", "TableReservation.Tests\TableReservation.Tests.csproj", "{6DA8A46F-1C97-4E26-9106-D8CF054C003E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{9B706454-C7A4-4E8C-9888-D79F6171AF8F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B706454-C7A4-4E8C-9888-D79F6171AF8F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B706454-C7A4-4E8C-9888-D79F6171AF8F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6DA8A46F-1C97-4E26-9106-D8CF054C003E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6DA8A46F-1C97-4E26-9106-D8CF054C003E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6DA8A46F-1C97-4E26-9106-D8CF054C003E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6DA8A46F-1C97-4E26-9106-D8CF054C003E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

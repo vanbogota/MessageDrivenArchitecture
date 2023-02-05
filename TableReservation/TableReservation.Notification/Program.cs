@@ -1,6 +1,8 @@
 ﻿using MassTransit;
+using MassTransit.Audit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using TableReservation.Messages;
 using TableReservation.Notification.Consumers;
 
 namespace TableReservation.Notification
@@ -16,8 +18,14 @@ namespace TableReservation.Notification
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
+                    //services.AddHostedService<Worker>();
                     services.AddMassTransit(x =>
                     {
+                        services.AddSingleton<IMessageAuditStore, AuditStore>();
+
+                        var serviceProvider = services.BuildServiceProvider();
+                        var auditStore = serviceProvider.GetService<IMessageAuditStore>();
+
                         x.AddConsumer<NotifyConsumer>();
 
                         x.UsingRabbitMq((context, cfg) =>
@@ -32,11 +40,19 @@ namespace TableReservation.Notification
                                 r.Ignore<ArgumentNullException>(x => x.Message.Contains("Consumer"));
                             });
 
-
                             cfg.ConfigureEndpoints(context);
+                            cfg.ConnectSendAuditObservers(auditStore);
+                            cfg.ConnectConsumeAuditObserver(auditStore);
                         });
                     });
-                    services.AddSingleton<Notifier>();                    
+                    services.AddSingleton<Notifier>();
+
+                    services.Configure<MassTransitHostOptions>(options =>
+                    {
+                        options.WaitUntilStarted = true;
+                        options.StartTimeout = TimeSpan.FromSeconds(30);
+                        options.StopTimeout = TimeSpan.FromMinutes(1);
+                    });
                 });
     }
 }

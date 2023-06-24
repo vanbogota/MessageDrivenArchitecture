@@ -1,2 +1,2 @@
 # MessageDrivenArchitecture
-курс на gb.ru
+Приложение с использованием RabbitMQ
